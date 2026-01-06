@@ -305,38 +305,75 @@
 
                 if (data.status && data.data) {
                     const d = data.data;
+                    
+                    // Extract nested data safely
+                    const provinsi = d.provinsi?.nama || d.provinsi || '-';
+                    const kotakab = d.kotakab?.nama || d.kabupaten || '-';
+                    const kecamatan = d.kecamatan?.nama || d.kecamatan || '-';
+                    const kelamin = d.kelamin || '-';
+                    const lahir = d.lahir_lengkap || d.lahir || '-';
+                    const kodeWilayah = d.kode_wilayah || '-';
+                    const nomorUrut = d.nomor_urut || '-';
+                    
+                    // Extract tambahan data
+                    const usia = d.tambahan?.usia || d.usia || '-';
+                    const kategoriUsia = d.tambahan?.kategori_usia || '-';
+                    const ultah = d.tambahan?.ultah || '-';
+                    const zodiak = d.tambahan?.zodiak || d.zodiak || '-';
+                    const pasaran = d.tambahan?.pasaran || '-';
+                    
                     resultDiv.innerHTML = `
                         <div class="result-item">
-                            <div class="result-label">Provinsi</div>
-                            <div class="result-value">${d.provinsi || '-'}</div>
-                        </div>
-                        <div class="result-item">
-                            <div class="result-label">Kabupaten/Kota</div>
-                            <div class="result-value">${d.kabupaten || '-'}</div>
-                        </div>
-                        <div class="result-item">
-                            <div class="result-label">Kecamatan</div>
-                            <div class="result-value">${d.kecamatan || '-'}</div>
-                        </div>
-                        <div class="result-item">
-                            <div class="result-label">Kode Pos</div>
-                            <div class="result-value">${d.kodepos || '-'}</div>
-                        </div>
-                        <div class="result-item">
-                            <div class="result-label">Tanggal Lahir</div>
-                            <div class="result-value">${d.lahir || '-'}</div>
+                            <div class="result-label">NIK</div>
+                            <div class="result-value">${d.nik || nik}</div>
                         </div>
                         <div class="result-item">
                             <div class="result-label">Jenis Kelamin</div>
-                            <div class="result-value">${d.kelamin || '-'}</div>
+                            <div class="result-value">${kelamin}</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-label">Tanggal Lahir</div>
+                            <div class="result-value">${lahir}</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-label">Pasaran</div>
+                            <div class="result-value">${pasaran}</div>
                         </div>
                         <div class="result-item">
                             <div class="result-label">Usia</div>
-                            <div class="result-value">${d.usia || '-'} tahun</div>
+                            <div class="result-value">${usia}</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-label">Kategori Usia</div>
+                            <div class="result-value">${kategoriUsia}</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-label">Ultah</div>
+                            <div class="result-value">${ultah}</div>
                         </div>
                         <div class="result-item">
                             <div class="result-label">Zodiak</div>
-                            <div class="result-value">${d.zodiak || '-'}</div>
+                            <div class="result-value">${zodiak}</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-label">Provinsi</div>
+                            <div class="result-value">${provinsi}</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-label">Kabupaten/Kota</div>
+                            <div class="result-value">${kotakab}</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-label">Kecamatan</div>
+                            <div class="result-value">${kecamatan}</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-label">Kode Wilayah</div>
+                            <div class="result-value">${kodeWilayah}</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-label">Nomor Urut</div>
+                            <div class="result-value">${nomorUrut}</div>
                         </div>
                     `;
                     resultDiv.classList.add('show');
