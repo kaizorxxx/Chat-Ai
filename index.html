@@ -301,12 +301,45 @@
                 const data = await response.json();
                 
                 console.log('API Response:', data);
+                console.log('Response type:', typeof data);
+                console.log('Response keys:', data ? Object.keys(data) : 'null');
 
                 loadingDiv.classList.remove('show');
                 checkBtn.disabled = false;
 
-                if (data && (data.status || data.nik)) {
-                    const d = data.data || data;
+                // Show raw response for debugging
+                if (!data) {
+                    errorDiv.textContent = 'No data received from API';
+                    errorDiv.classList.add('show');
+                    return;
+                }
+
+                // Try to find the actual data in various possible structures
+                let d = null;
+                
+                if (data.data) {
+                    d = data.data;
+                } else if (data.result) {
+                    d = data.result;
+                } else if (data.response) {
+                    d = data.response;
+                } else if (data.nik) {
+                    d = data;
+                } else {
+                    // Show what we got for debugging
+                    resultDiv.innerHTML = `
+                        <div class="result-item">
+                            <div class="result-label">Debug: Raw API Response</div>
+                            <div class="result-value" style="font-size: 11px; word-break: break-all;">${JSON.stringify(data, null, 2)}</div>
+                        </div>
+                    `;
+                    resultDiv.classList.add('show');
+                    return;
+                }
+                
+                console.log('Extracted data:', d);
+
+                if (d) {
                     
                     // Extract nested data safely
                     const nikValue = d.nik || nik;
