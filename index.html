@@ -299,14 +299,17 @@
             try {
                 const response = await fetch(`https://api.nekolabs.web.id/tools/nikparser?nik=${nik}`);
                 const data = await response.json();
+                
+                console.log('API Response:', data);
 
                 loadingDiv.classList.remove('show');
                 checkBtn.disabled = false;
 
-                if (data.status && data.data) {
-                    const d = data.data;
+                if (data && (data.status || data.nik)) {
+                    const d = data.data || data;
                     
                     // Extract nested data safely
+                    const nikValue = d.nik || nik;
                     const provinsi = d.provinsi?.nama || d.provinsi || '-';
                     const kotakab = d.kotakab?.nama || d.kabupaten || '-';
                     const kecamatan = d.kecamatan?.nama || d.kecamatan || '-';
@@ -314,18 +317,19 @@
                     const lahir = d.lahir_lengkap || d.lahir || '-';
                     const kodeWilayah = d.kode_wilayah || '-';
                     const nomorUrut = d.nomor_urut || '-';
+                    const kodepos = d.kodepos || '-';
                     
                     // Extract tambahan data
-                    const usia = d.tambahan?.usia || d.usia || '-';
+                    const usia = d.tambahan?.usia || (d.usia ? d.usia + ' tahun' : '-');
                     const kategoriUsia = d.tambahan?.kategori_usia || '-';
                     const ultah = d.tambahan?.ultah || '-';
                     const zodiak = d.tambahan?.zodiak || d.zodiak || '-';
                     const pasaran = d.tambahan?.pasaran || '-';
                     
-                    resultDiv.innerHTML = `
+                    let resultHTML = `
                         <div class="result-item">
                             <div class="result-label">NIK</div>
-                            <div class="result-value">${d.nik || nik}</div>
+                            <div class="result-value">${nikValue}</div>
                         </div>
                         <div class="result-item">
                             <div class="result-label">Jenis Kelamin</div>
@@ -334,23 +338,39 @@
                         <div class="result-item">
                             <div class="result-label">Tanggal Lahir</div>
                             <div class="result-value">${lahir}</div>
-                        </div>
+                        </div>`;
+                    
+                    if (pasaran !== '-') {
+                        resultHTML += `
                         <div class="result-item">
                             <div class="result-label">Pasaran</div>
                             <div class="result-value">${pasaran}</div>
-                        </div>
+                        </div>`;
+                    }
+                    
+                    resultHTML += `
                         <div class="result-item">
                             <div class="result-label">Usia</div>
                             <div class="result-value">${usia}</div>
-                        </div>
+                        </div>`;
+                    
+                    if (kategoriUsia !== '-') {
+                        resultHTML += `
                         <div class="result-item">
                             <div class="result-label">Kategori Usia</div>
                             <div class="result-value">${kategoriUsia}</div>
-                        </div>
+                        </div>`;
+                    }
+                    
+                    if (ultah !== '-') {
+                        resultHTML += `
                         <div class="result-item">
                             <div class="result-label">Ultah</div>
                             <div class="result-value">${ultah}</div>
-                        </div>
+                        </div>`;
+                    }
+                    
+                    resultHTML += `
                         <div class="result-item">
                             <div class="result-label">Zodiak</div>
                             <div class="result-value">${zodiak}</div>
@@ -366,16 +386,33 @@
                         <div class="result-item">
                             <div class="result-label">Kecamatan</div>
                             <div class="result-value">${kecamatan}</div>
-                        </div>
+                        </div>`;
+                    
+                    if (kodeWilayah !== '-') {
+                        resultHTML += `
                         <div class="result-item">
                             <div class="result-label">Kode Wilayah</div>
                             <div class="result-value">${kodeWilayah}</div>
-                        </div>
+                        </div>`;
+                    }
+                    
+                    if (kodepos !== '-') {
+                        resultHTML += `
+                        <div class="result-item">
+                            <div class="result-label">Kode Pos</div>
+                            <div class="result-value">${kodepos}</div>
+                        </div>`;
+                    }
+                    
+                    if (nomorUrut !== '-') {
+                        resultHTML += `
                         <div class="result-item">
                             <div class="result-label">Nomor Urut</div>
                             <div class="result-value">${nomorUrut}</div>
-                        </div>
-                    `;
+                        </div>`;
+                    }
+                    
+                    resultDiv.innerHTML = resultHTML;
                     resultDiv.classList.add('show');
                 } else {
                     errorDiv.textContent = 'Invalid NIK or data not found';
