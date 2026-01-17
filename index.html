@@ -220,6 +220,11 @@
                 <input type="text" id="nik" placeholder="Enter 16 digit NIK" maxlength="16">
             </div>
 
+            <div class="input-group">
+                <label for="nama">Nama Lengkap (Opsional)</label>
+                <input type="text" id="nama" placeholder="Enter full name">
+            </div>
+
             <button id="checkBtn">Parse NIK</button>
 
             <div class="loading" id="loading">
@@ -269,6 +274,7 @@
         // Check NIK
         document.getElementById('checkBtn').addEventListener('click', async () => {
             const nik = document.getElementById('nik').value.trim();
+            const nama = document.getElementById('nama').value.trim();
             const resultDiv = document.getElementById('result');
             const errorDiv = document.getElementById('error');
             const loadingDiv = document.getElementById('loading');
